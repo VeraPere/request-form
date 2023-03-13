@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <style>
+        div{
+            text-align: center;
+        }
+        #qsn{
+            border: 1px solid #236075;
+            height: 50px;
+            display: block;
+            margin: 15px auto;
+            /* margin-right: auto;
+            margin-bottom: 10px; */
+        }
+        p{
+            display: inline;
+            
+            /* float: left; */
+        }
+        #inf{
+            margin: 15px auto;
+        }
+        #checkbox{
+            margin: 5px auto;
+        }
+        input[type=submit] {
+            color: blueviolet;
+            display: block;
+            margin: 5px auto;
+        }
+        textarea:invalid {
+        border: 2px dashed red;
+        }
+        textarea:invalid:required {
+            background-image: linear-gradient(to right, pink, lightgreen);
+            }
+        textarea:valid {
+            border: 2px solid black;
+        }
+    </style>
+    <div>
+    <h1>Остались вопросы?</h1>
+    <form action="use.php" method="post">
+    <label for="advance">Ваш вопрос/предложение</label>
+    <textarea class="forma" id="qsn" cols="80" rows="5" placeholder="Добрый день!"></textarea>
+    <div id="inf">
+        <p>Ваше Имя 
+            <input type="text" id="name" class="forma" required>
+        </p>
+        <p id="tel">Ваш телефон 
+            <input type="tel" class="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="+7(999)123-4567" required>
+        </p>
+        <p>Ваш email
+            <input type="email" class="forma" id="email" required>
+        </form>
+    </div>
+    </p>
+    <input type="checkbox" name="" id="checkbox">подтверждаю согласие на обработку персональных данных
+    <input type="submit" disabled>
+    </div>
+
+    <script>
+
+        window.addEventListener("DOMContentLoaded", function() {
+    [].forEach.call( document.querySelectorAll('.tel'), function(input) {
+    var keyCode;
+    function mask(event) {
+        event.keyCode && (keyCode = event.keyCode);
+        var pos = this.selectionStart;
+        if (pos < 3) event.preventDefault();
+        var matrix = "+7 (___) ___ ____",
+            i = 0,
+            def = matrix.replace(/\D/g, ""),
+            val = this.value.replace(/\D/g, ""),
+            new_value = matrix.replace(/[_\d]/g, function(a) {
+                return i < val.length ? val.charAt(i++) || def.charAt(i) : a
+            });
+        i = new_value.indexOf("_");
+        if (i != -1) {
+            i < 5 && (i = 3);
+            new_value = new_value.slice(0, i)
+        }
+        var reg = matrix.substr(0, this.value.length).replace(/_+/g,
+            function(a) {
+                return "\\d{1," + a.length + "}"
+            }).replace(/[+()]/g, "\\$&");
+        reg = new RegExp("^" + reg + "$");
+        if (!reg.test(this.value) || this.value.length < 5 || keyCode > 47 && keyCode < 58) this.value = new_value;
+        if (event.type == "blur" && this.value.length < 5)  this.value = ""
+    }
+
+    input.addEventListener("input", mask, false);
+    input.addEventListener("focus", mask, false);
+    input.addEventListener("blur", mask, false);
+    input.addEventListener("keydown", mask, false)
+
+  });
+
+});
+/*
+b1.onclick = f1
+b1.onclick = f2
+b1.onclick = f3  выполнится только f3
+
+b1.addEventListener('click', f1)
+b1.addEventListener('click', f2)
+b1.addEventListener('click', f3) выполнится только f1,f2,f3
+посмотреть это 
+*/
+window.onload = init
+let submit = document.querySelector('input[type="submit"]')
+function request(){
+    submit.onclick = function() {
+        let div = document.querySelector('div')
+        alert('ваш запрос отправлен')
+    }
+}
+request()
+    function init() {
+        let qsn = document.getElementById('qsn')
+        let forms = document.getElementsByClassName('forma')
+        let name = document.getElementById('name')
+        let email = document.getElementById('email')
+        for(let i of forms) {
+                i.onkeyup = function () {
+                    if (qsn.value.length > 7 && name.value.length > 2 && email.value.length > 3) {
+                        document.getElementById('checkbox').onclick = function() {
+                            if(this.checked) {
+                                submit.removeAttribute('disabled','disabled')
+                                } else {
+                                    submit.setAttribute('disabled','disabled')
+                                }
+                            }
+                    }    
+                }
+            }  
+    } 
+    </script>
+    
+</body>
+</html>
